@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background-color: rgb(115, 220, 247);
+            box-sizing: border-box;
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body::-ms-overflow-style{
+            display: none;  
+            scrollbar-width: none; 
+        }
+        h1{
+            text-align: center;
+            padding: 15px;
+            border: 3px solid transparent;
+            background-color: antiquewhite;            
+            box-shadow: 5px 5px rgb(241, 239, 239);
+        }
+        label{
+            margin-top: 10px;
+            font-size: 1.2rem;
+            color: #000;
+            background-color: aliceblue transparent;
+        }
+        input{
+            margin-top: 5px;
+            width: 350px;
+            height: 40px;            
+            background-color: rgba(98, 214, 52, 0.389);
+            border: 2px solid rgb(30, 234, 238);
+            border-radius: 5px;
+        }
+        input:focus{
+            outline:2px solid pink ;
+            box-shadow: 7px 5px rgb(209, 13, 193);;
+        }
+        input::placeholder{
+            font-size: 1rem;
+            text-align: center;
+            color: rgb(0, 0, 0);
+        }
+        button{
+            width: 150px;
+            height: 40px;
+            margin: 2% auto;
+            background-color: rgba(98, 214, 52, 0.389);
+            border: 2px solid rgb(30, 234, 238);
+            border-radius: 5px;
+        }
+        button:hover{
+            background-color: #04AA6D;
+            cursor: pointer;
+        }
+        form{
+            display: grid;
+            margin: 1% auto;
+            align-items: center;
+            justify-content: center;
+        }
+        #table{
+            margin: 1% auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1%;
+        }        
+        tbody{
+            text-align: center; 
+        }
+        /* td{
+            border: 2px solid rgb(223, 22, 22);
+        } */
+        #list{
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 70%;
+        }
+        #list td, #list th {
+            border: 2px solid rgb(204, 245, 91);
+            padding: 8px;
+        }
+        #list tr:nth-child(even){background-color: #5ff1f1;}
+        #list tr:hover {background-color: #ddd;}
+        #list th{
+            padding:12px 0 12px 0;
+            text-align: center;
+            background-color: #04AA6D;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>FORM</h1>
+    <form action="/api" method="post">
+        <label for="fname" id="form-element">FirstName</label>
+        <input type="text" name="fname" id="fname" placeholder="FirstName">
+        <label for="lname">LastName</label>
+        <input type="text" name="lname" id="lname" placeholder="LastName">
+        <label for="age">Age</label>
+        <input type="number" name="age" id="age" placeholder="Age">
+        <label for="phone">PhoneNumber</label>
+        <input type="number" name="phone" id="phone" placeholder="PhoneNumber">
+        <button type="submit" id="button">FORM</button>
+    </form>
+    <div id="table">        
+        <table id="list">
+            <thead>
+                <tr>                            
+                    <th>ID</th>
+                    <th>FIRSTNAME</th>                            
+                    <th>LASETNAME</th> 
+                    <th>AGE</th>                            
+                    <th>PHONE NO.</th>  
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!-- <td></td>
+                    <td></td>
+                    <td></td> -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        //  const host = "http://localhost:3330/";
+         const form = document.getElementById("form-element")
+         const fname = document.getElementById("fname").value
+         const lname = document.getElementById("lname").value
+         const age = document.getElementById("age").value
+         const phone = document.getElementById("phone").value
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+            });
+        
+            const data = {fname,lname,age,phone}    
+
+            const options ={
+                method:'POST',
+                heders:{
+                    'Content-Type':'application/json charset=UTF-8'
+                },
+                body:JSON.stringify(data)
+            }
+            
+            fetch('/api', options).then(res=>{
+                console.log(res);
+            })
+       
+            fetch('/api/show')
+            .then(function(response){
+				return response.json();
+            })
+            .then(function(data){
+                let html = "";
+                   for(let i=0;i<data.length;i++){                             
+                       html += `
+                            <tr>
+                                <td>${data[i].id}</td>
+                                <td>${data[i].fname}</td>  
+                                <td>${data[i].lname}</td>     
+                                <td>${data[i].age}</td>              
+                                <td>${data[i].phone}</td>                
+                            </tr>`;
+                                
+                    }
+                document.querySelector("#list tbody").innerHTML = html;
+            }).catch(function(error){
+                        alert("Something Went wrong tbody")
+            })  
+                  
+    </script>
+</body>
+</html>
